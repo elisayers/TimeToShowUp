@@ -99,3 +99,11 @@ At the end of a session, record:
 - concrete blocker and the single next action.
 
 At the start of a session, read this file, inspect branch/deployment drift, and verify access before changing configuration. Project renames never authorize creating a replacement database.
+
+## Latest continuation: browser authentication blocker
+
+The user authorized browser fallback and autonomous work toward a working site. Supabase browser sign-in required GitHub; user selected GitHub, then Google, then the visible Eli account. During the Google password step browserAuth returned declined with reason user_took_over. A required current-page observation was then automatically rejected by browser security review because manual authentication state was unknown. No authentication success has been verified. Do not bypass the review or inspect credentials. Resume only after the authentication handoff is resolved under current browser rules. No database migrations, production configuration changes, or production deployments have been performed by this agent.
+
+## Deferred audit, explicitly requested
+
+After the app is working, audit the history of the rename, creation of the second Supabase project, original-project pause, missing or unapplied migration handoff, mismatched production configuration, account/organization access, and repeated setup work. Separate verified events from hypotheses. Do not do this audit ahead of restoring service.

@@ -1,8 +1,10 @@
 # Time To Show Up — Supabase Replacement & Deployment Handoff
 
-Date: 2026-10-21  
-Repository: `https://github.com/elisayers/TimeToShowUp` (`main` @ `c20b3b69871191b7d7bace6c721e16245a974aa4`)  
-Production URL: `https://timetoshowup.vercel.app`
+Date: 2026-10-22  
+Repository: `https://github.com/elisayers/TimeToShowUp` (`main` @ `c20b3b69871191b7d7bace6c721e16245a974aa4` / `43f617454f4b19568dafa40f5164898f1c7ce487`)  
+Production URL: `https://timetoshowup.vercel.app`  
+Vercel Project ID: `prj_eH22w3e7r0M4TKqPzDuDxnPdqrBo` (`eli-sayers-projects/timetoshowup`, Org ID: `team_amag9ski2rQSdhoFwxpdAUVZ`)  
+Production Deployment ID: `dpl_H8R9u2Cnc391gVbpcvRv38in668G` (`https://timetoshowup-itp0p01qm-eli-sayers-projects.vercel.app` → `https://timetoshowup.vercel.app`)
 
 ---
 
@@ -12,7 +14,7 @@ Production URL: `https://timetoshowup.vercel.app`
 | --- | --- | --- | --- | --- | --- | --- |
 | **Active Replacement (New)** | `Time To Show Up` | `nlpulegrrxfoofmftxqx` | `Jason Eli Sayers` (`zifmniabyrssbvbsdmmi`) | `us-east-1` | `ACTIVE_HEALTHY` | Linked locally; all 7 migrations applied and verified; Auth & Google OAuth configured. |
 | **Previous Incomplete Project (#2)** | `TimeToShowUp` | `rqfaswhxdzejfeeeqsnj` | `Jason Eli Sayers` (`zifmniabyrssbvbsdmmi`) | `us-east-1` | `ACTIVE_HEALTHY` | Preserved (not deleted). Created 2026-10-16T03:25:15Z with 0 migrations and Google OAuth disabled. |
-| **Original Prototype Project (#1)** | `Time To Follow Through` | `gpuipamwhvbnwrykyznv` | `Jason Eli Sayers` (`zifmniabyrssbvbsdmmi`) | `us-east-1` | `INACTIVE` | Preserved (not deleted). Currently baked into the stale Vercel build prior to redeploy. |
+| **Original Prototype Project (#1)** | `Time To Follow Through` | `gpuipamwhvbnwrykyznv` | `Jason Eli Sayers` (`zifmniabyrssbvbsdmmi`) | `us-east-1` | `INACTIVE` | Preserved (not deleted). Replaced by `nlpulegrrxfoofmftxqx` in Vercel production (`dpl_H8R9u2Cnc391gVbpcvRv38in668G`). |
 
 > **Why Display Name `Time To Show Up` Was Used:**  
 > Supabase Management API rejected creating a second project with the exact string `"TimeToShowUp"` (`Project with name "TimeToShowUp" already exists in your organization`) because `rqfaswhxdzejfeeeqsnj` already held that string. Per instructions (*"Do not delete existing projects merely to free a name"*), both prior projects were preserved and `"Time To Show Up"` (`nlpulegrrxfoofmftxqx`) was created in the `Jason Eli Sayers` organization (`zifmniabyrssbvbsdmmi`).
@@ -64,19 +66,28 @@ Configured via Supabase Management API (`PATCH /v1/projects/nlpulegrrxfoofmftxqx
   - `http://localhost:3000/auth/callback`
 - **Google Provider (`external_google_enabled`):** `true`
 - **Google OAuth Client ID (`external_google_client_id`):** `800992584122-h7h2opu98p4flt995ejhav07is0f3h1k.apps.googleusercontent.com` (reused from Google Cloud project `time-to-follow-through`)
-- **Supabase OAuth Callback URI (for Google Cloud Console):**
+- **Supabase OAuth Callback URI (registered and verified in Google Cloud Console):**
   - `https://nlpulegrrxfoofmftxqx.supabase.co/auth/v1/callback`
+  - Verified live: `GET https://nlpulegrrxfoofmftxqx.supabase.co/auth/v1/authorize?provider=google&redirect_to=https://timetoshowup.vercel.app/auth/callback` redirects cleanly to Google (`accounts.google.com/v3/signin/identifier`) with `0` OAuth errors (`redirect_uri_mismatch: false`).
 
 ---
 
-## 4. Vercel Environment Configuration Names
+## 4. Vercel Environment Configuration Names & Production Verification
 
-| Variable Name | Visibility / Type | Target Value (Non-Secret Reference) |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Config (Plaintext) | `https://nlpulegrrxfoofmftxqx.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Config (Plaintext) | `sb_publishable_1e2yCUyUbI4v9mC6_UWc-A_HNmEmU3J` |
-| `DAILY_API_KEY` | Secret (Encrypted) | *(Preserved existing Daily.co API secret)* |
-| `NEXT_PUBLIC_DAILY_DOMAIN` | Config (Plaintext) | `https://timetoshowup.daily.co` |
+- **Vercel Project:** `eli-sayers-projects/timetoshowup` (`prj_eH22w3e7r0M4TKqPzDuDxnPdqrBo`, Org `team_amag9ski2rQSdhoFwxpdAUVZ`)
+- **Production Deployment:** `dpl_H8R9u2Cnc391gVbpcvRv38in668G` (`READY`, aliased to `https://timetoshowup.vercel.app`)
+- **Live Bundle & Route Verification:**
+  - `GET https://timetoshowup.vercel.app/login` → `200 OK`
+  - Client bundle (`/_next/static/immutable/chunks/35_wbqu-l4dex.js`) verified pointing to `https://nlpulegrrxfoofmftxqx.supabase.co`
+  - `GET https://timetoshowup.vercel.app/dashboard` (unauthenticated) → `307 Temporary Redirect` to `/login`
+  - `GET https://timetoshowup.vercel.app/auth/callback` (without code) → `307 Temporary Redirect` to `https://timetoshowup.vercel.app/login?error=auth`
+
+| Variable Name | Visibility / Type | Environments | Target Value (Non-Secret Reference) |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Config (Plaintext) | Production, Preview, Development | `https://nlpulegrrxfoofmftxqx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Config (Plaintext) | Production, Preview, Development | `sb_publishable_1e2yCUyUbI4v9mC6_UWc-A_HNmEmU3J` |
+| `DAILY_API_KEY` | Secret (Encrypted) | Production, Preview | *(Preserved existing Daily.co API secret)* |
+| `NEXT_PUBLIC_DAILY_DOMAIN` | Config (Plaintext) | Production | `https://timetoshowup.daily.co` |
 
 ---
 
